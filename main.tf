@@ -12,7 +12,7 @@ resource "aws_s3_bucket" "example" {
   }
 }
 resource "aws_s3_bucket" "example" {
-  bucket = "praneeth0101013310" # Change to a unique bucket name
+  bucket = "praneeth0101011310" # Change to a unique bucket name
   acl    = "private"
 
   tags = {
