@@ -11,7 +11,7 @@ resource "aws_s3_bucket" "first_bucket" {
     Environment = "Dev"
   }
 }
-resource "aws_s3_bucket" "first_bucket" {
+resource "aws_s3_bucket" "second_bucket" {
   bucket = "praneeth0101011310" # Change to a unique bucket name
   acl    = "private"
 
