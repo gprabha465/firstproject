@@ -11,3 +11,12 @@ resource "aws_s3_bucket" "example" {
     Environment = "Dev"
   }
 }
+resource "aws_s3_bucket" "example" {
+  bucket = "praneeth0101013310" # Change to a unique bucket name
+  acl    = "private"
+
+  tags = {
+    Name        = "My bucket"
+    Environment = "Dev"
+  }
+}
