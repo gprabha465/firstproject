@@ -17,6 +17,18 @@ pipeline {
                 }
             }
         }
+        stage('Terraform plan') {
+            steps {
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials']]) {
+                    sh 'terraform plan'
+                }
+            }
+        }
+        stage('Input'){
+            steps {
+               input(message: 'Please review tf plan and approve', ok: 'Proceed')
+            }
+        }
         stage('Terraform Apply') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials']]) {
