@@ -33,14 +33,14 @@ pipeline {
         stage('Terraform Init') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials']]) {
-                    sh '${TF_HOME}/terraform init'
+                    sh 'terraform init'
                 }
             }
         }
         stage('Terraform Plan') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials']]) {
-                    sh '${TF_HOME}/terraform plan'
+                    sh 'terraform plan'
                 }
             }
         }
@@ -52,7 +52,7 @@ pipeline {
         stage('Terraform Apply') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials']]) {
-                    sh '${TF_HOME}/terraform apply -auto-approve'
+                    sh 'terraform apply -auto-approve'
                 }
             }
         }
