@@ -1,10 +1,28 @@
 pipeline {
     agent any
     environment {
-        //GITHUB_TOKEN = credentials('github')
+        GITHUB_TOKEN = credentials('github')
         AWS_CREDENTIALS = credentials('aws-credentials')
+        TF_HOME = "${WORKSPACE}/terraform"
+    }
+    options {
+        skipDefaultCheckout()
     }
     stages {
+        stage('Setup Terraform') {
+            steps {
+                script {
+                    // Download Terraform binary
+                    sh '''
+                    mkdir -p ${TF_HOME}
+                    wget https://releases.hashicorp.com/terraform/1.0.0/terraform_1.0.0_linux_amd64.zip -O ${TF_HOME}/terraform.zip
+                    unzip ${TF_HOME}/terraform.zip -d ${TF_HOME}
+                    rm ${TF_HOME}/terraform.zip
+                    chmod +x ${TF_HOME}/terraform
+                    '''
+                }
+            }
+        }
         stage('Checkout') {
             steps {
                 git branch: 'dev', url: 'https://github.com/gprabha465/firstproject', credentialsId: 'github'
@@ -13,28 +31,34 @@ pipeline {
         stage('Terraform Init') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials']]) {
-                    sh 'terraform init'
+                    sh '${TF_HOME}/terraform init'
                 }
             }
         }
-        stage('Terraform plan') {
+        stage('Terraform Plan') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials']]) {
-                    sh 'terraform plan'
+                    sh '${TF_HOME}/terraform plan'
                 }
             }
         }
-        stage('Input'){
+        stage('Input') {
             steps {
-               input(message: 'Please review tf plan and approve', ok: 'Proceed')
+                input(message: 'Please review tf plan and approve', ok: 'Proceed')
             }
         }
         stage('Terraform Apply') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials']]) {
-                    sh 'terraform apply -auto-approve'
+                    sh '${TF_HOME}/terraform apply -auto-approve'
                 }
             }
+        }
+    }
+    post {
+        always {
+            // Cleanup Terraform binary
+            sh 'rm -rf ${TF_HOME}'
         }
     }
 }
