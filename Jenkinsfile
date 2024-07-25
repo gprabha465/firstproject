@@ -31,10 +31,13 @@ pipeline {
         }
         stage('Terraform Init') {
             steps {
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials']]) {
-                    sh '${TF_HOME}/terraform init'
-                }
-            }
+               script {
+                   // Construct the Git URL with the token
+                    def gitUrl = "https://${GITHUB_TOKEN}@github.com/gprabha465/firstproject.git"
+                    // Perform the Git checkout
+                   checkout([$class: 'GitSCM', branches: [[name: '*/dev']], userRemoteConfigs: [[url: gitUrl]]])
+               }
+      }
         }
         stage('Terraform Plan') {
             steps {
