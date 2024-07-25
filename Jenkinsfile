@@ -9,22 +9,6 @@ pipeline {
         skipDefaultCheckout()
     }
     stages {
-        stage('Setup Terraform') {
-            steps {
-                script {
-                    // Download Terraform binary
-                    sh '''
-                    mkdir -p ${TF_HOME}
-                    wget https://releases.hashicorp.com/terraform/1.0.0/terraform_1.0.0_linux_amd64.zip -O ${TF_HOME}/terraform.zip
-                    unzip ${TF_HOME}/terraform.zip -d ${TF_HOME}
-                    rm ${TF_HOME}/terraform.zip
-                    chmod +x ${TF_HOME}/terraform
-                    ${TF_HOME}/terraform --version
-                    whoami
-                    '''
-                }
-            }
-        }
         stage('Checkout') {
             steps {
                 git branch: 'dev', url: 'https://github.com/gprabha465/firstproject', credentialsId: 'jenkins-access'
@@ -55,12 +39,6 @@ pipeline {
                     sh 'terraform apply -auto-approve'
                 }
             }
-        }
-    }
-    post {
-        always {
-            // Cleanup Terraform binary
-            sh 'rm -rf ${TF_HOME}'
         }
     }
 }
