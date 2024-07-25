@@ -27,18 +27,15 @@ pipeline {
         }
         stage('Checkout') {
             steps {
-                git branch: 'dev', url: 'https://github.com/gprabha465/firstproject', credentialsId: 'github'
+                git branch: 'dev', url: 'https://github.com/gprabha465/firstproject', credentialsId: 'jenkins-access'
             }
         }
         stage('Terraform Init') {
             steps {
-               script {
-                   // Construct the Git URL with the token
-                    def gitUrl = "https://${GITHUB_TOKEN}@github.com/gprabha465/firstproject.git"
-                    // Perform the Git checkout
-                   checkout([$class: 'GitSCM', branches: [[name: '*/dev']], userRemoteConfigs: [[url: gitUrl]]])
-               }
-      }
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials']]) {
+                    sh '${TF_HOME}/terraform init'
+                }
+            }
         }
         stage('Terraform Plan') {
             steps {
