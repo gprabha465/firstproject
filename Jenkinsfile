@@ -17,7 +17,7 @@ pipeline {
         stage('Terraform Init') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials']]) {
-                    sh 'terraform init'
+                    sh 'terraform init -backend-config=backedn.tfvars'
                 }
             }
         }
