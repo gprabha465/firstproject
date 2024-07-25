@@ -52,7 +52,7 @@ pipeline {
         stage('Terraform Apply') {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials']]) {
-                    sh '${TF_HOME}/terraform apply -auto-approve'
+                    sh '${TF_HOME}/terraform destroy -auto-approve'
                 }
             }
         }
