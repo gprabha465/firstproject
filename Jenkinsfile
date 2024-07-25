@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        GITHUB_TOKEN = credentials('github')
+        //GITHUB_TOKEN = credentials('github')
         AWS_CREDENTIALS = credentials('aws-credentials')
     }
     stages {
