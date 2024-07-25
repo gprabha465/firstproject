@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        GITHUB_TOKEN = credentials('github')
+        GITHUB_TOKEN = credentials('github-access')
         AWS_CREDENTIALS = credentials('aws-credentials')
         TF_HOME = "${WORKSPACE}/terraform"
     }
