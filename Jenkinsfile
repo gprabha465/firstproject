@@ -19,6 +19,7 @@ pipeline {
                     unzip ${TF_HOME}/terraform.zip -d ${TF_HOME}
                     rm ${TF_HOME}/terraform.zip
                     chmod +x ${TF_HOME}/terraform
+                    ${TF_HOME}/terraform --version
                     whoami
                     '''
                 }
