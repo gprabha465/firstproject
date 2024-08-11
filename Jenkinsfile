@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         GITHUB_TOKEN = credentials('jenkins-access')
-        AWS_CREDENTIALS = credentials('aws')
+        AWS_CREDENTIALS = credentials('aws-credentials')
         TF_HOME = "${WORKSPACE}/terraform"
     }
     options {
